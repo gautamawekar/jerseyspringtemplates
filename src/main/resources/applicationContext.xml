@@ -36,9 +36,9 @@
 	<!-- <bean id="personService" class="com.gawekar.service.PersonServiceImpl">
 	<property name="jpaTemplate" ref="jpaTemplate"></property>
 	</bean> -->
-	<bean id="personDao" class="com.gawekar.service.PersonDaoImpl">
+	<!-- <bean id="personDao" class="com.gawekar.service.PersonDaoImpl">
 	<property name="jpaTemplate" ref="jpaTemplate"></property>
-	</bean>
+	</bean> -->
 </beans>
 
 

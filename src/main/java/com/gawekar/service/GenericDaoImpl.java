@@ -4,9 +4,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaTemplate;
 
 public abstract class GenericDaoImpl<T> implements GenericDao<T> {
+    @Autowired
     private JpaTemplate jpaTemplate;
     private Class<T> type;
 

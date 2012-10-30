@@ -1,56 +1,27 @@
 package com.gawekar.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.orm.jpa.JpaTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.gawekar.entity.Department;
 import com.gawekar.entity.Person;
 
-@Service("personService")
-public class PersonServiceImpl {
-    private JpaTemplate jpaTemplate;
+@Service
+public class PersonServiceImpl implements PersonService {
+    private final PersonDao personDao;
+    private final DepartmentService deptService;
 
-    public PersonServiceImpl() {
+    @Autowired
+    public PersonServiceImpl(PersonDao personDao, DepartmentService deptService) {
+        this.personDao = personDao;
+        this.deptService = deptService;
     }
 
-    public void setJpaTemplate(JpaTemplate jpaTemplate) {
-        this.jpaTemplate = jpaTemplate;
-    }
-
-    public JpaTemplate getJpaTemplate() {
-        return this.jpaTemplate;
-    }
-
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public void createPerson(Person p) {
-        jpaTemplate.persist(p);
-        //jpaTemplate.flush();
-    }
-
-    @Transactional(readOnly = true)
-    public List<?> findAll() {
-        return jpaTemplate.findByNamedQuery("Person.findAll");
-        //        Query query = jpaTemplate.getEntityManagerFactory().createEntityManager().createNamedQuery("Person.findAll");
-        //        return query.getResultList();
-    }
-
-    @Transactional(readOnly = true)
-    public Person findById(int id) {
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("id", id);
-        return (Person) this.jpaTemplate.findByNamedQueryAndNamedParams("Person.findPersonById", params).get(0);
-        //return (Person) this.jpaTemplate.findByNamedQuery().get(0);
-    }
-
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public void deletePerson(int id) {
-        Person p = this.findById(id);
-        this.jpaTemplate.remove(p);
-        //this.jpaTemplate.flush();
+    @Override
+    public Person createPerson(Person p) {
+        Department d = p.getDept();
+        Department updatedDept = this.deptService.createDepartmentIfRequired(d);
+        p.setDept(updatedDept);
+        return personDao.createPerson(p);
     }
 }

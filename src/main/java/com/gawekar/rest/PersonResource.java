@@ -17,16 +17,19 @@ import org.springframework.stereotype.Component;
 
 import com.gawekar.entity.Person;
 import com.gawekar.service.PersonDao;
+import com.gawekar.service.PersonService;
 
 /**
  * Example resource class hosted at the URI path "/myresource"
  */
-@Path("/myresource")
+@Path("/person")
 @Component
 @Scope("request")
-public class MyResource {
+public class PersonResource {
     @Autowired
     PersonDao personDao;
+    @Autowired
+    PersonService personService;
 
     /**
      * Method processing HTTP GET requests, producing "text/plain" MIME media
@@ -40,13 +43,18 @@ public class MyResource {
         return "Hi there! This is person resource";
     }
 
+    /**
+     * {"name":"charan","age":"12", "dept" :{"name":"test"}}
+     * 
+     * @param p
+     * @return
+     */
     @Path("/create")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createPerson(Person p) {
-        personDao.createPerson(p);
-        return Response.ok(p).build();
+        return Response.ok(personService.createPerson(p)).build();
     }
 
     @GET

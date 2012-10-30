@@ -1,0 +1,55 @@
+<html>
+<head>
+<script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+<script src="/js/knockout-2.1.0.js" type="text/javascript"></script>
+<script src="/js/department-app.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	var deptViewModel = new DepartmentViewModel();
+	ko.applyBindings(deptViewModel);
+	deptViewModel.refreshData();
+});
+</script>
+</head>
+<body>
+<body>
+<a href="/index.jsp">Create Person</a>
+	<!-- <form data-bind="submit: refreshData">
+		<button type="submit">Refresh</button>
+	</form> -->
+	<br/><br/><br/>
+	<form data-bind="submit: addDepartment">
+		Add Department:
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+				</tr>
+			</thead>
+			<tr>
+				<td><input data-bind="value: newDepartmentName" /></td>
+			</tr>
+		</table>
+		<button type="submit" >Add Department</button>
+	</form>
+	<br/>
+	<table>
+		<thead>
+			<tr>
+				<th>id</th>
+				<th>Name</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody data-bind="foreach: depts">
+			<tr>
+				<td data-bind="text: id"></td>
+				<td><input data-bind="value: name" /></td>
+				<td><a href="#" data-bind="click: $parent.removeDepartment">Delete</a></td>
+				<td><a href="#" data-bind="click: $parent.updateDepartment">Update</a></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

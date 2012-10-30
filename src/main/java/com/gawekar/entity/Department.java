@@ -3,10 +3,13 @@ package com.gawekar.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Department")
+@Table(name = "DEPARTMENT")
+@NamedQueries({ @NamedQuery(name = "Department.findall", query = "SELECT d FROM Department d") })
 public class Department {
     @Id
     @GeneratedValue

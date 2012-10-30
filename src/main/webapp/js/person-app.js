@@ -3,6 +3,8 @@ function Person(data){
 	self.id = data.id;
 	self.name = data.name;
 	self.age = data.age;
+	self.deptId = data.dept.id;
+	self.deptName = data.dept.name;
 }
 
 function PersonViewModel(){
@@ -10,17 +12,21 @@ function PersonViewModel(){
 	// new person input place holder
 	self.newPersonName = ko.observable();
 	self.newPersonAge = ko.observable();
+	self.selectedDept = ko.observable();
 	
 	self.people = ko.observableArray([]);
 	
 	self.addPerson = function(){
 		$.ajax({
 			type : "POST",
-			url : "/webresources/myresource/create",
+			url : "/webresources/person/create",
 			contentType: "application/json",
 			data : JSON.stringify({
 				name : this.newPersonName(),
 				age : this.newPersonAge(),
+				dept :{
+					id : $("#depts").find("option:selected").val()
+				}
 				}),
 			success: function(data){
 				self.refreshData();
@@ -32,7 +38,7 @@ function PersonViewModel(){
 	};
 	
 	self.refreshData = function() {
-		$.getJSON("/webresources/myresource/findall", function(data) {
+		$.getJSON("/webresources/person/findall", function(data) {
 			var mappedPerson = $.map(data, function(p) {
 				return new Person(p);
 			});
@@ -43,7 +49,7 @@ function PersonViewModel(){
 	};
 	
 	self.removePerson = function(p){
-		var deleteApi = "/webresources/myresource/delete/" + p.id;
+		var deleteApi = "/webresources/person/delete/" + p.id;
 			$.ajax({
 				type : "DELETE",
 				url  : deleteApi,
@@ -57,7 +63,7 @@ function PersonViewModel(){
 	};
 	
 	self.updatePerson = function(p){
-		var updateApi = "/webresources/myresource/update";
+		var updateApi = "/webresources/person/update";
 			$.ajax({
 				type : "PUT",
 				url  : updateApi,
@@ -77,7 +83,3 @@ function PersonViewModel(){
 			
 	};
 }
-
-$(document).ready(function() {
-	ko.applyBindings(new PersonViewModel());
-});
